@@ -1,0 +1,105 @@
+<html> 
+<head> 
+  <title>Password Strength Check</title> 
+ 
+  <style> 
+    body { 
+      font-family: Arial, sans-serif; 
+      background: #0f172a; 
+      color: #e2e8f0; 
+      display: flex; 
+justify-content: center; 
+align-items: center; 
+height: 100vh; 
+} 
+.container { 
+background: #1e293b; 
+padding: 30px; 
+border-radius: 12px; 
+width: 400px; 
+box-shadow: 0 10px 25px rgba(0,0,0,0.4); 
+} 
+h2 { 
+text-align: center; 
+margin-bottom: 20px; 
+} 
+.input-row { 
+position: relative; 
+} 
+input { 
+width: 100%; 
+padding: 10px 42px 10px -10px; 
+border-radius: 5px; 
+border: none; 
+outline: none; 
+font-size: 16px; 
+margin-bottom: 8px; 
+} 
+.toggle-btn { 
+position: absolute; 
+right: 8px; 
+top: -1px; 
+border: none; 
+background: transparent; 
+color: #94a3b8; 
+cursor: pointer; 
+font-size: 14px; 
+} 
+.toggle-btn:hover { color: #e2e8f0; } 
+.helper { 
+font-size: 13px; 
+margin-bottom: 12px; 
+color: #94a3b8; 
+} 
+button.submit { 
+width: 100%; 
+padding: 10px; 
+border: none; 
+border-radius: 8px; 
+background: #3b82f6; 
+color: white; 
+font-size: 16px; 
+cursor: pointer; 
+margin-bottom: 15px; 
+transition: 0.2s; 
+} 
+button.submit:hover { 
+background: #2563eb; 
+} 
+.strength-bar { 
+height: 8px; 
+border-radius: 5px; 
+background: #334155; 
+overflow: hidden; 
+margin-bottom: 10px; 
+} 
+.strength-fill { 
+height: 100%; 
+width: 0%; 
+transition: 0.25s; 
+} 
+.weak { background: #ef4444; width: 25%; } 
+.moderate { background: #f59e0b; width: 50%; } 
+.strong { background: #3b82f6; width: 75%; } 
+.very-strong { background: #22c55e; width: 100%; } 
+#strength { 
+font-weight: bold; 
+margin-bottom: 6px; 
+} 
+#breachStatus { 
+      font-size: 14px; 
+      margin-bottom: 10px; 
+    } 
+ 
+    .breach-safe { color: #22c55e; } 
+    .breach-found { color: #ef4444; } 
+ 
+    ul { 
+      padding-left: 18px; 
+      font-size: 14px; 
+      color: #cbd5f5; 
+    } 
+ 
+    li { margin-bottom: 5px; } 
+  </style> 
+</head> 
