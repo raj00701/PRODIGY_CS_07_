@@ -1,0 +1,113 @@
+<body> 
+ 
+<div class="container"> 
+  <h2>Password Strength</h2> 
+ 
+  <form id="passwordForm"> 
+    <div class="input-row"> 
+      <input type="password" id="password" placeholder="Enter password" /> 
+      <button type="button" class="toggle-btn" id="togglePassword">     </button> 
+    </div> 
+    <div class="helper">Show Password</div> 
+ 
+    <button type="submit" class="submit">Submit</button> 
+  </form> 
+ 
+  <div class="strength-bar"> 
+    <div id="strengthFill" class="strength-fill"></div> 
+  </div> 
+ 
+  <p id="strength"></p> 
+<p id="breachStatus"></p> 
+<ul id="feedback"></ul> 
+</div> 
+<script> 
+function assessPassword(password) { 
+let score = 0; 
+let feedback = []; 
+if (password.length >= 8) score += 2; 
+else feedback.push("Use at least 8 characters."); 
+if (password.length >= 12) score += 2; 
+if (/[a-z]/.test(password)) score++; 
+else feedback.push("Add lowercase letters."); 
+if (/[A-Z]/.test(password)) score++; 
+else feedback.push("Add uppercase letters."); 
+if (/[0-9]/.test(password)) score++; 
+else feedback.push("Include numbers."); 
+if (/[^A-Za-z0-9]/.test(password)) score += 2; 
+else feedback.push("Include special characters."); 
+let strength = score <= 3 ? "Weak" : 
+score <= 6 ? "Moderate" : 
+score <= 8 ? "Strong" : "Very Strong"; 
+return { score, strength, feedback }; 
+} 
+// Show / Hide 
+document.getElementById("togglePassword").addEventListener("click", () => { 
+const input = document.getElementById("password"); 
+input.type = input.type === "password" ? "text" : "password"; 
+}); 
+// SHA-1 via Web Crypto 
+async function sha1(str) { 
+const data = new TextEncoder().encode(str); 
+const hashBuffer = await crypto.subtle.digest("SHA-1", data); 
+return Array.from(new Uint8Array(hashBuffer)) 
+.map(b => b.toString(16).padStart(2, "0")) 
+.join("") 
+.toUpperCase(); 
+} 
+// k-anonymity breach check 
+async function checkBreach(password) { 
+const hash = await sha1(password); 
+const prefix = hash.slice(0, 5); 
+const suffix = hash.slice(5); 
+const res = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`); 
+const text = await res.text(); 
+for (const line of text.split("\n")) { 
+const [suf, count] = line.trim().split(":"); 
+if (suf === suffix) return parseInt(count, 10); 
+} 
+} 
+return 0; 
+document.getElementById("passwordForm").addEventListener("submit", async (e) => { 
+e.preventDefault(); 
+const password = document.getElementById("password").value; 
+// Strength 
+const result = assessPassword(password); 
+document.getElementById("strength").innerText = "Strength: " + result.strength; 
+const feedbackList = document.getElementById("feedback"); 
+feedbackList.innerHTML = ""; 
+result.feedback.forEach(f => { 
+const li = document.createElement("li"); 
+li.textContent = f; 
+feedbackList.appendChild(li); 
+}); 
+const fill = document.getElementById("strengthFill"); 
+f
+ill.className = "strength-fill"; 
+f
+ill.classList.add( 
+result.strength === "Weak" ? "weak" : 
+result.strength === "Moderate" ? "moderate" : 
+result.strength === "Strong" ? "strong" : "very-strong" 
+); 
+// Breach 
+const breachStatus = document.getElementById("breachStatus"); 
+breachStatus.textContent = "Checking breaches…"; 
+ 
+  try { 
+    const count = await checkBreach(password); 
+    if (count > 0) { 
+      breachStatus.textContent = `     Found in breaches ${count} times`; 
+      breachStatus.className = "breach-found"; 
+    } else { 
+      breachStatus.textContent = "     Not found in known breaches"; 
+      breachStatus.className = "breach-safe"; 
+    } 
+  } catch (err) { 
+    breachStatus.textContent = "Error checking breach database"; 
+  } 
+}); 
+</script> 
+ 
+</body> 
+</html>
