@@ -1,4 +1,4 @@
-# PRODIGY_CS_07_
+# PRODIGY_CS_07_Password_Strength_Check
 # 💫 About Me:
 A password strength checker is a tool that evaluates how secure a password is against guessing, <br>brute-force attacks, and common cracking techniques.  <br>What It Actually Does:  <br>It analyses a password based on multiple security factors, such as: <br>• Length → longer passwords are harder to crack. <br>• Character diversity → lowercase, uppercase, numbers, symbols.  <br>• Complexity → randomness vs predictable patterns.
 
